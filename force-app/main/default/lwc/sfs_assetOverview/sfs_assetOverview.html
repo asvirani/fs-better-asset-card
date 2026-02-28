@@ -1,0 +1,116 @@
+<template>
+    <div class="slds-p-around_medium" style="height: 100%; overflow: auto;">
+        <!-- Header -->
+        <div class="header-section slds-m-bottom_medium">
+            <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center">
+                <div class="slds-col">
+                    <template lwc:if={hasData}>
+                        <h2 class="slds-text-heading_medium slds-m-bottom_xx-small">
+                            <lightning-icon icon-name="standard:asset_object" size="small" class="slds-m-right_x-small"></lightning-icon>
+                            {assetName}
+                        </h2>
+                        <div class="slds-m-left_xx-large">
+                            <lightning-icon icon-name={statusIcon} size="xx-small" variant={statusVariant} class="slds-m-right_xx-small"></lightning-icon>
+                            <span class={statusClass}>{statusLabel}</span>
+                        </div>
+                    </template>
+                    <template lwc:else>
+                        <h2 class="slds-text-heading_medium">Asset Overview</h2>
+                    </template>
+                </div>
+                <div class="slds-col slds-no-flex">
+                    <lightning-button-icon
+                        icon-name="utility:close"
+                        alternative-text="Close"
+                        variant="bare"
+                        onclick={handleClose}
+                    ></lightning-button-icon>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading -->
+        <template lwc:if={isLoading}>
+            <div class="slds-align_absolute-center slds-p-around_large">
+                <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+            </div>
+        </template>
+
+        <!-- Error -->
+        <template lwc:if={error}>
+            <div class="slds-notify slds-notify_alert slds-alert_error" role="alert">
+                <lightning-icon icon-name="utility:error" size="x-small" variant="inverse" class="slds-m-right_x-small"></lightning-icon>
+                <span>{error}</span>
+            </div>
+        </template>
+
+        <!-- No Asset Found -->
+        <template lwc:if={hasNoAsset}>
+            <div class="slds-align_absolute-center slds-p-around_large">
+                <div class="slds-text-align_center">
+                    <lightning-icon icon-name="utility:info" size="large" class="slds-m-bottom_small"></lightning-icon>
+                    <p class="slds-text-body_regular">No asset is linked to this record.</p>
+                </div>
+            </div>
+        </template>
+
+        <!-- Tabs -->
+        <template lwc:if={hasData}>
+            <lightning-tabset variant="scoped">
+                <lightning-tab label="Details" icon-name="standard:asset_object">
+                    <c-sfs_assetdetails asset={asset} computed-metrics={computedMetrics}></c-sfs_assetdetails>
+                </lightning-tab>
+
+                <lightning-tab label="Work Orders" icon-name="standard:work_order">
+                    <span slot="label">
+                        Work Orders
+                        <template lwc:if={workOrderCount}>
+                            <lightning-badge label={workOrderCount} class="slds-m-left_xx-small"></lightning-badge>
+                        </template>
+                    </span>
+                    <c-sfs_asset-work-order-history work-orders={workOrders}></c-sfs_asset-work-order-history>
+                </lightning-tab>
+
+                <lightning-tab label="Warranties" icon-name="standard:entitlement">
+                    <span slot="label">
+                        Warranties
+                        <template lwc:if={warrantyCount}>
+                            <lightning-badge label={warrantyCount} class="slds-m-left_xx-small"></lightning-badge>
+                        </template>
+                    </span>
+                    <c-sfs_asset-warranties warranties={warranties}></c-sfs_asset-warranties>
+                </lightning-tab>
+
+                <lightning-tab label="Downtime" icon-name="standard:time_off">
+                    <span slot="label">
+                        Downtime
+                        <template lwc:if={downtimeCount}>
+                            <lightning-badge label={downtimeCount} class="slds-m-left_xx-small"></lightning-badge>
+                        </template>
+                    </span>
+                    <c-sfs_asset-downtime downtime-periods={downtimePeriods}></c-sfs_asset-downtime>
+                </lightning-tab>
+
+                <lightning-tab label="Cases" icon-name="standard:case">
+                    <span slot="label">
+                        Cases
+                        <template lwc:if={caseCount}>
+                            <lightning-badge label={caseCount} class="slds-m-left_xx-small"></lightning-badge>
+                        </template>
+                    </span>
+                    <c-sfs_asset-cases cases={cases}></c-sfs_asset-cases>
+                </lightning-tab>
+
+                <lightning-tab label="Hierarchy" icon-name="utility:hierarchy">
+                    <span slot="label">
+                        Hierarchy
+                        <template lwc:if={hierarchyCount}>
+                            <lightning-badge label={hierarchyCount} class="slds-m-left_xx-small"></lightning-badge>
+                        </template>
+                    </span>
+                    <c-sfs-asset-hierarchy hierarchy-data={hierarchyData}></c-sfs-asset-hierarchy>
+                </lightning-tab>
+            </lightning-tabset>
+        </template>
+    </div>
+</template>

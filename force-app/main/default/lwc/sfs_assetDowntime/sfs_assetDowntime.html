@@ -1,0 +1,42 @@
+<template>
+    <template lwc:if={hasDowntime}>
+        <template for:each={formattedDowntime} for:item="dp">
+            <div key={dp.Id} class="downtime-card slds-m-bottom_x-small">
+                <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center slds-m-bottom_xx-small">
+                    <div class="slds-col">
+                        <p class="record-title">{dp.AssetDowntimePeriodNumber}</p>
+                    </div>
+                    <div class="slds-col slds-no-flex">
+                        <span class={dp.typeClass}>{dp.downtimeTypeLabel}</span>
+                    </div>
+                </div>
+                <div class="slds-grid slds-wrap slds-gutters_x-small slds-m-bottom_xx-small">
+                    <div class="slds-col slds-size_1-of-3">
+                        <p class="detail-label">Start</p>
+                        <p class="detail-value">{dp.formattedStartTime}</p>
+                    </div>
+                    <div class="slds-col slds-size_1-of-3">
+                        <p class="detail-label">End</p>
+                        <p class="detail-value">{dp.formattedEndTime}</p>
+                    </div>
+                    <div class="slds-col slds-size_1-of-3">
+                        <p class="detail-label">Duration</p>
+                        <p class="detail-value duration-value">{dp.duration}</p>
+                    </div>
+                </div>
+                <template lwc:if={dp.Description}>
+                    <p class="detail-label">Description</p>
+                    <p class="detail-value description-text">{dp.descriptionLabel}</p>
+                </template>
+            </div>
+        </template>
+    </template>
+    <template lwc:else>
+        <div class="slds-align_absolute-center slds-p-around_medium empty-state">
+            <div class="slds-text-align_center">
+                <lightning-icon icon-name="utility:info" size="small" class="slds-m-bottom_x-small"></lightning-icon>
+                <p class="slds-text-body_regular slds-text-color_weak">No downtime periods recorded for this asset.</p>
+            </div>
+        </div>
+    </template>
+</template>

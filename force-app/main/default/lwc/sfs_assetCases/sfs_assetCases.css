@@ -1,0 +1,93 @@
+.case-card {
+    background: #ffffff;
+    border: 1px solid #e5e5e5;
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+}
+
+.record-title {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: #181818;
+}
+
+.record-subtitle {
+    font-size: 0.8125rem;
+    color: #706e6b;
+}
+
+.badge {
+    display: inline-block;
+    padding: 0.125rem 0.5rem;
+    border-radius: 1rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.badge-new {
+    background: #e8f4fd;
+    color: #0070d2;
+}
+
+.badge-working {
+    background: #fef3cd;
+    color: #8a6d3b;
+}
+
+.badge-escalated {
+    background: #f8d7da;
+    color: #c23934;
+}
+
+.badge-closed {
+    background: #d4edda;
+    color: #2e844a;
+}
+
+.badge-waiting {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.badge-default {
+    background: #f3f3f3;
+    color: #706e6b;
+}
+
+.detail-label {
+    font-size: 0.6875rem;
+    color: #706e6b;
+    margin-bottom: 0.0625rem;
+}
+
+.detail-value {
+    font-size: 0.8125rem;
+    color: #181818;
+}
+
+.priority-critical {
+    font-size: 0.8125rem;
+    color: #c23934;
+    font-weight: 600;
+}
+
+.priority-high {
+    font-size: 0.8125rem;
+    color: #fe9339;
+    font-weight: 600;
+}
+
+.priority-medium {
+    font-size: 0.8125rem;
+    color: #0070d2;
+}
+
+.priority-low {
+    font-size: 0.8125rem;
+    color: #706e6b;
+}
+
+.empty-state {
+    min-height: 6rem;
+}

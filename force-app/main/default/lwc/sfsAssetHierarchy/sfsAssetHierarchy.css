@@ -1,0 +1,220 @@
+/* ===== Summary Bar ===== */
+.hierarchy-summary {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 0.75rem;
+    background: #f3f3f3;
+    border-radius: 0.375rem;
+}
+
+.summary-text {
+    font-size: 0.8125rem;
+    color: #706e6b;
+    font-weight: 500;
+}
+
+/* ===== Tree Container ===== */
+.tree-container {
+    padding: 0.25rem 0;
+}
+
+/* ===== Node Card ===== */
+.node-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.625rem 0.75rem;
+    background: #ffffff;
+    border: 1px solid #e5e5e5;
+    border-radius: 0.5rem;
+    margin-bottom: 0.25rem;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.node-card:hover {
+    border-color: #d8d8d8;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+.node-current {
+    border-left: 3px solid #0070d2;
+    background: #f0f7ff;
+    border-color: #0070d2;
+}
+
+.node-current:hover {
+    border-color: #0070d2;
+}
+
+/* ===== Node Layout ===== */
+.node-left {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    flex: 1;
+    min-width: 0;
+}
+
+.node-right {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-shrink: 0;
+}
+
+/* ===== Expand Controls ===== */
+.expand-btn {
+    background: none;
+    border: none;
+    padding: 0.125rem;
+    cursor: pointer;
+    border-radius: 0.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+}
+
+.expand-btn:hover {
+    background: #f3f3f3;
+}
+
+.expand-icon {
+    --sds-c-icon-color-foreground-default: #706e6b;
+}
+
+.expand-spacer {
+    width: 20px;
+    display: inline-block;
+    flex-shrink: 0;
+}
+
+/* ===== Node Icon ===== */
+.node-icon {
+    flex-shrink: 0;
+}
+
+/* ===== Node Info ===== */
+.node-info {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.node-name {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: #181818;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.node-product {
+    font-size: 0.6875rem;
+    color: #706e6b;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ===== Serial Number ===== */
+.node-serial {
+    font-size: 0.6875rem;
+    color: #969492;
+    font-family: 'SF Mono', 'Consolas', monospace;
+}
+
+/* ===== Status Badges ===== */
+.badge {
+    display: inline-block;
+    padding: 0.0625rem 0.4375rem;
+    border-radius: 1rem;
+    font-size: 0.625rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+}
+
+.badge-installed {
+    background: #d4edda;
+    color: #2e844a;
+}
+
+.badge-shipped {
+    background: #e8f4fd;
+    color: #0070d2;
+}
+
+.badge-decommissioned {
+    background: #f8d7da;
+    color: #c23934;
+}
+
+.badge-maintenance {
+    background: #fef3cd;
+    color: #8a6d3b;
+}
+
+.badge-default {
+    background: #f3f3f3;
+    color: #706e6b;
+}
+
+/* ===== Tree Connectors ===== */
+.children-container {
+    padding-left: 1.25rem;
+    position: relative;
+}
+
+.child-node,
+.grandchild-node {
+    display: flex;
+    position: relative;
+}
+
+.tree-connector {
+    width: 1.25rem;
+    display: flex;
+    align-items: flex-start;
+    flex-shrink: 0;
+    padding-top: 1rem;
+}
+
+.connector-line {
+    width: 1rem;
+    height: 1px;
+    background: #d8d8d8;
+}
+
+.node-content-wrapper {
+    flex: 1;
+    min-width: 0;
+}
+
+/* Vertical line connecting siblings */
+.children-container::before {
+    content: '';
+    position: absolute;
+    left: 0.625rem;
+    top: 0;
+    bottom: 0.75rem;
+    width: 1px;
+    background: #d8d8d8;
+}
+
+.grandchildren {
+    padding-left: 1rem;
+}
+
+.grandchildren::before {
+    left: 0.5rem;
+}
+
+/* ===== Empty State ===== */
+.empty-state {
+    min-height: 6rem;
+}

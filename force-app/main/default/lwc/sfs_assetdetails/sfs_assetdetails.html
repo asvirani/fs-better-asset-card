@@ -1,0 +1,102 @@
+<template>
+    <!-- Asset Details Content -->
+    <template lwc:if={hasAsset}>
+        <!-- General Info -->
+        <div class="slds-section slds-is-open slds-m-bottom_small">
+            <h3 class="section-title slds-m-bottom_x-small">General Information</h3>
+            <div class="slds-grid slds-wrap slds-gutters_x-small">
+                <div class="slds-col slds-size_1-of-2 slds-m-bottom_small">
+                    <p class="field-label">Serial Number</p>
+                    <p class="field-value">{serialNumber}</p>
+                </div>
+                <div class="slds-col slds-size_1-of-2 slds-m-bottom_small">
+                    <p class="field-label">Status</p>
+                    <p class="field-value">
+                        <lightning-icon icon-name={statusIcon} size="xx-small" variant={statusVariant} class="slds-m-right_xx-small"></lightning-icon>
+                        {statusLabel}
+                    </p>
+                </div>
+                <div class="slds-col slds-size_1-of-2 slds-m-bottom_small">
+                    <p class="field-label">Product</p>
+                    <p class="field-value">{productName}</p>
+                </div>
+                <div class="slds-col slds-size_1-of-2 slds-m-bottom_small">
+                    <p class="field-label">Install Date</p>
+                    <p class="field-value">{installDate}</p>
+                </div>
+                <div class="slds-col slds-size_1-of-2 slds-m-bottom_small">
+                    <p class="field-label">Account</p>
+                    <p class="field-value">{accountName}</p>
+                </div>
+                <div class="slds-col slds-size_1-of-2 slds-m-bottom_small">
+                    <p class="field-label">Contact</p>
+                    <p class="field-value">{contactName}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Warranty & Performance -->
+        <div class="slds-section slds-is-open slds-m-bottom_small">
+            <h3 class="section-title slds-m-bottom_x-small">Warranty &amp; Performance</h3>
+            <div class="slds-grid slds-wrap slds-gutters_x-small">
+                <div class="slds-col slds-size_1-of-2 slds-m-bottom_small">
+                    <p class="field-label">Warranty Status</p>
+                    <p class={warrantyStatusClass}>{warrantyStatus}</p>
+                </div>
+                <div class="slds-col slds-size_1-of-2 slds-m-bottom_small">
+                    <p class="field-label">Performance Status</p>
+                    <p class={performanceStatusClass}>{performanceStatus}</p>
+                </div>
+                <div class="slds-col slds-size_1-of-2 slds-m-bottom_small">
+                    <p class="field-label">Warranty Services</p>
+                    <p class="field-value">{warrantyServices}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Metrics -->
+        <div class="slds-section slds-is-open">
+            <h3 class="section-title slds-m-bottom_x-small">Performance Metrics</h3>
+            <div class="slds-grid slds-wrap slds-gutters_x-small">
+                <div class="slds-col slds-size_1-of-3 slds-m-bottom_small">
+                    <div class="metric-card">
+                        <p class="metric-label">Availability</p>
+                        <p class="metric-value">{availability}</p>
+                    </div>
+                </div>
+                <div class="slds-col slds-size_1-of-3 slds-m-bottom_small">
+                    <div class="metric-card">
+                        <p class="metric-label">Reliability</p>
+                        <p class="metric-value">{reliability}</p>
+                    </div>
+                </div>
+                <div class="slds-col slds-size_1-of-3 slds-m-bottom_small">
+                    <div class="metric-card">
+                        <p class="metric-label">Total Downtime</p>
+                        <p class="metric-value">{downtimeHours}</p>
+                    </div>
+                </div>
+                <div class="slds-col slds-size_1-of-3 slds-m-bottom_small">
+                    <div class="metric-card">
+                        <p class="metric-label">Avg Repair Time</p>
+                        <p class="metric-value">{avgRepairTime}</p>
+                    </div>
+                </div>
+                <div class="slds-col slds-size_1-of-3 slds-m-bottom_small">
+                    <div class="metric-card">
+                        <p class="metric-label">MTBF</p>
+                        <p class="metric-value">{mtbf}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <!-- Show message if no asset data -->
+    <template lwc:else>
+        <div class="slds-text-align_center slds-p-around_large">
+            <lightning-icon icon-name="utility:info" size="medium" class="slds-m-bottom_small"></lightning-icon>
+            <p class="slds-text-body_regular slds-text-color_weak">No asset details available.</p>
+        </div>
+    </template>
+</template>

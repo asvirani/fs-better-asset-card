@@ -1,0 +1,77 @@
+.warranty-card {
+    background: #ffffff;
+    border: 1px solid #e5e5e5;
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+}
+
+.warranty-title {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: #181818;
+}
+
+.warranty-type {
+    font-size: 0.8125rem;
+    color: #706e6b;
+}
+
+.badge {
+    display: inline-block;
+    padding: 0.125rem 0.5rem;
+    border-radius: 1rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.badge-active {
+    background: #d4edda;
+    color: #2e844a;
+}
+
+.badge-expired {
+    background: #f8d7da;
+    color: #c23934;
+}
+
+.detail-label {
+    font-size: 0.6875rem;
+    color: #706e6b;
+    margin-bottom: 0.0625rem;
+}
+
+.detail-value {
+    font-size: 0.8125rem;
+    color: #181818;
+}
+
+.coverage-section {
+    background: #f3f3f3;
+    border-radius: 0.375rem;
+    padding: 0.5rem;
+}
+
+.coverage-title {
+    font-size: 0.6875rem;
+    color: #706e6b;
+    text-transform: uppercase;
+    letter-spacing: 0.025rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+.coverage-label {
+    font-size: 0.6875rem;
+    color: #706e6b;
+}
+
+.coverage-value {
+    font-size: 0.9375rem;
+    font-weight: 700;
+    color: #181818;
+}
+
+.empty-state {
+    min-height: 6rem;
+}

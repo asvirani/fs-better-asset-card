@@ -1,0 +1,18 @@
+/* SLDS 2 Compliant Styles with CSS Variables */
+
+.header-section {
+    border-bottom: 2px solid var(--slds-g-color-border-base-4, #e5e5e5);
+    padding-bottom: 0.75rem;
+}
+
+.status-normal {
+    color: var(--slds-g-color-success-base-50, #2e844a);
+    font-weight: 600;
+    font-size: 0.8125rem;
+}
+
+.status-critical {
+    color: var(--slds-g-color-error-base-50, #ea001e);
+    font-weight: 600;
+    font-size: 0.8125rem;
+}

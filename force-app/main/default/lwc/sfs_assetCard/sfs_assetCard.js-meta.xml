@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>62.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>Asset Card</masterLabel>
+    <description>Compact asset overview card for field service on Work Order pages</description>
+    <targets>
+        <target>lightning__RecordPage</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__RecordPage">
+            <objects>
+                <object>WorkOrder</object>
+            </objects>
+            <property name="showMetrics" type="Boolean" default="true" label="Show Performance Metrics" description="Display availability, reliability, and MTBF metrics"/>
+            <property name="showServiceHistory" type="Boolean" default="true" label="Show Service History Summary" description="Show recent work order and case counts"/>
+            <property name="showHierarchy" type="Boolean" default="true" label="Show Asset Hierarchy" description="Show parent system hierarchy indicator"/>
+            <property name="maxRecentWorkOrders" type="Integer" default="3" label="Recent Work Orders to Show" description="Number of recent work orders in quick list"/>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

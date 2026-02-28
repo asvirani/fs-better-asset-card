@@ -1,0 +1,63 @@
+/* SLDS 2 Compliant Styles with CSS Variables */
+
+.section-title {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--slds-g-color-neutral-base-50, #3e3e3c);
+    text-transform: uppercase;
+    letter-spacing: 0.025rem;
+    border-bottom: 1px solid var(--slds-g-color-border-base-4, #e5e5e5);
+    padding-bottom: 0.375rem;
+}
+
+.field-label {
+    font-size: 0.75rem;
+    color: var(--slds-g-color-neutral-base-40, #706e6b);
+    font-weight: 400;
+    margin-bottom: 0.125rem;
+}
+
+.field-value {
+    font-size: 0.875rem;
+    color: var(--slds-g-color-neutral-base-10, #181818);
+    font-weight: 500;
+}
+
+.metric-card {
+    background: var(--slds-g-color-neutral-base-95, #f3f3f3);
+    border-radius: 0.5rem;
+    padding: 0.625rem;
+    text-align: center;
+}
+
+.metric-label {
+    font-size: 0.6875rem;
+    color: var(--slds-g-color-neutral-base-40, #706e6b);
+    text-transform: uppercase;
+    letter-spacing: 0.025rem;
+    margin-bottom: 0.25rem;
+}
+
+.metric-value {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--slds-g-color-neutral-base-10, #181818);
+}
+
+.status-good {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--slds-g-color-success-base-50, #2e844a);
+}
+
+.status-warning {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--slds-g-color-warning-base-50, #dd7a01);
+}
+
+.status-critical {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--slds-g-color-error-base-50, #ea001e);
+}

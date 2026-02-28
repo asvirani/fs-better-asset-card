@@ -1,0 +1,236 @@
+<template>
+    <!-- Loading State -->
+    <template lwc:if={isLoading}>
+        <lightning-card icon-name="standard:asset_object" title="Device Details">
+            <div class="slds-align_absolute-center slds-p-around_medium">
+                <lightning-spinner alternative-text="Loading device data" size="small"></lightning-spinner>
+            </div>
+        </lightning-card>
+    </template>
+
+    <!-- Error State -->
+    <template lwc:if={error}>
+        <lightning-card icon-name="standard:asset_object" title="Device Details">
+            <div class="slds-p-around_small slds-text-color_error">
+                <lightning-icon icon-name="utility:error" size="x-small" variant="error" class="slds-m-right_xx-small"></lightning-icon>
+                {error}
+            </div>
+        </lightning-card>
+    </template>
+
+    <!-- No Asset Linked -->
+    <template lwc:if={hasNoAsset}>
+        <lightning-card icon-name="standard:asset_object" title="Device Details">
+            <div class="slds-p-around_small slds-text-align_center slds-text-color_weak">
+                <lightning-icon icon-name="utility:info" size="small" class="slds-m-bottom_x-small"></lightning-icon>
+                <p>No asset linked to this Work Order.</p>
+            </div>
+        </lightning-card>
+    </template>
+
+    <!-- Main Card Content -->
+    <template lwc:if={hasData}>
+        <lightning-card>
+            <!-- CARD HEADER: Device Identity -->
+            <div slot="title" class="card-header">
+                <div class="slds-grid slds-grid_vertical-align-center slds-grid_align-spread">
+                    <div class="slds-col">
+                        <div class="device-name slds-truncate" title={productName}>{productName}</div>
+                        <div class="serial-number">SN: {serialNumber}</div>
+                    </div>
+                    <div class="slds-col slds-no-flex">
+                        <span class={deviceStatusClass}>
+                            <lightning-icon icon-name={deviceStatusIcon} size="xx-small" variant={deviceStatusVariant} class="slds-m-right_xx-small"></lightning-icon>
+                            {deviceStatus}
+                        </span>
+                    </div>
+                </div>
+                <!-- Product Family Tag -->
+                <template lwc:if={hasProductFamily}>
+                    <div class="slds-m-top_xx-small">
+                        <span class={productFamilyClass}>{productFamilyLabel}</span>
+                    </div>
+                </template>
+            </div>
+
+            <div class="card-body">
+                <!-- SECTION 1: Status Indicators (always visible) -->
+                <div class="status-row slds-m-bottom_x-small">
+                    <div class="slds-grid slds-gutters_xx-small">
+                        <!-- Warranty Status -->
+                        <div class="slds-col slds-size_1-of-2">
+                            <div class="indicator-tile">
+                                <div class="indicator-label">
+                                    <lightning-icon icon-name={warrantyIcon} size="xx-small" class="slds-m-right_xx-small"></lightning-icon>
+                                    Warranty
+                                </div>
+                                <div class={warrantyStatusClass}>{warrantyStatus}</div>
+                                <template lwc:if={hasActiveWarranty}>
+                                    <div class="indicator-detail">{warrantyServices}</div>
+                                </template>
+                            </div>
+                        </div>
+                        <!-- Performance Status -->
+                        <div class="slds-col slds-size_1-of-2">
+                            <div class="indicator-tile">
+                                <div class="indicator-label">
+                                    <lightning-icon icon-name="utility:activity" size="xx-small" class="slds-m-right_xx-small"></lightning-icon>
+                                    Performance
+                                </div>
+                                <div class={performanceStatusClass}>{performanceStatus}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECTION 2: Key Metrics (collapsible) -->
+                <template lwc:if={showMetrics}>
+                    <div class="section-divider"></div>
+                    <div class="compact-section">
+                        <div class="section-header" data-section="metrics" onclick={toggleSection}>
+                            <span class="section-title-text">Device Metrics</span>
+                            <lightning-icon
+                                icon-name={metricsChevron}
+                                size="xx-small"
+                                class="section-chevron">
+                            </lightning-icon>
+                        </div>
+                        <!-- Always show availability + reliability in compact row -->
+                        <div class="metrics-compact slds-grid slds-gutters_xx-small slds-m-top_xx-small">
+                            <div class="slds-col slds-size_1-of-2">
+                                <div class="metric-mini">
+                                    <span class="metric-mini-label">Availability</span>
+                                    <span class={availabilityClass}>{availability}</span>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2">
+                                <div class="metric-mini">
+                                    <span class="metric-mini-label">Reliability</span>
+                                    <span class="metric-value">{reliability}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Expanded: show MTBF, Avg Repair, Downtime -->
+                        <template lwc:if={isMetricsExpanded}>
+                            <div class="metrics-expanded slds-grid slds-wrap slds-gutters_xx-small slds-m-top_xx-small">
+                                <div class="slds-col slds-size_1-of-3">
+                                    <div class="metric-mini">
+                                        <span class="metric-mini-label">MTBF</span>
+                                        <span class="metric-value">{mtbf}</span>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_1-of-3">
+                                    <div class="metric-mini">
+                                        <span class="metric-mini-label">Avg Repair</span>
+                                        <span class="metric-value">{avgRepairTime}</span>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_1-of-3">
+                                    <div class="metric-mini">
+                                        <span class="metric-mini-label">Downtime</span>
+                                        <span class="metric-value">{downtimeHours}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </template>
+
+                <!-- SECTION 3: Service History Summary (collapsible) -->
+                <template lwc:if={showServiceHistory}>
+                    <div class="section-divider"></div>
+                    <div class="compact-section">
+                        <div class="section-header" data-section="history" onclick={toggleSection}>
+                            <span class="section-title-text">Service History</span>
+                            <lightning-icon
+                                icon-name={historyChevron}
+                                size="xx-small"
+                                class="section-chevron">
+                            </lightning-icon>
+                        </div>
+                        <!-- Always visible: summary counters -->
+                        <div class="slds-grid slds-gutters_xx-small slds-m-top_xx-small">
+                            <div class="slds-col slds-size_1-of-3">
+                                <div class="counter-tile">
+                                    <div class="counter-value">{totalWorkOrderCount}</div>
+                                    <div class="counter-label">Total WOs</div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-3">
+                                <div class="counter-tile">
+                                    <div class="counter-value counter-highlight">{openWorkOrderCount}</div>
+                                    <div class="counter-label">Open WOs</div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-3">
+                                <div class="counter-tile">
+                                    <div class="counter-value">{openCaseCount}</div>
+                                    <div class="counter-label">Open Cases</div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Expanded: recent work order list -->
+                        <template lwc:if={isHistoryExpanded}>
+                            <template lwc:if={hasRecentWorkOrders}>
+                                <div class="recent-wo-list slds-m-top_xx-small">
+                                    <template for:each={recentWorkOrders} for:item="wo">
+                                        <div key={wo.Id} class="recent-wo-item" data-id={wo.Id} onclick={navigateToWorkOrder}>
+                                            <div class="slds-grid slds-grid_vertical-align-center">
+                                                <lightning-icon icon-name={wo.statusIcon} size="xx-small" class="slds-m-right_xx-small"></lightning-icon>
+                                                <div class="slds-col slds-truncate">
+                                                    <span class="wo-number">{wo.WorkOrderNumber}</span>
+                                                    <span class="wo-subject slds-truncate">{wo.Subject}</span>
+                                                </div>
+                                                <span class={wo.statusClass}>{wo.Status}</span>
+                                            </div>
+                                        </div>
+                                    </template>
+                                </div>
+                            </template>
+                        </template>
+                    </div>
+                </template>
+
+                <!-- SECTION 4: Asset Hierarchy Indicator (collapsible) -->
+                <template lwc:if={showHierarchy}>
+                    <template lwc:if={hasHierarchyData}>
+                        <div class="section-divider"></div>
+                        <div class="compact-section">
+                            <div class="section-header" data-section="hierarchy" onclick={toggleSection}>
+                                <span class="section-title-text">
+                                    <lightning-icon icon-name="utility:hierarchy" size="xx-small" class="slds-m-right_xx-small"></lightning-icon>
+                                    System Hierarchy
+                                </span>
+                                <lightning-badge label={hierarchyTotalCount} class="slds-m-left_xx-small"></lightning-badge>
+                            </div>
+                            <template lwc:if={isSubComponent}>
+                                <div class="hierarchy-hint slds-m-top_xx-small">
+                                    <span class="hierarchy-label">Part of:</span>
+                                    <a class="hierarchy-link" onclick={navigateToParentAsset}>{parentAssetName}</a>
+                                </div>
+                            </template>
+                            <template lwc:if={isHierarchyExpanded}>
+                                <div class="hierarchy-detail slds-m-top_xx-small">
+                                    <template lwc:if={hasChildAssets}>
+                                        <span class="hierarchy-label">{childAssetCount} sub-components</span>
+                                    </template>
+                                </div>
+                            </template>
+                        </div>
+                    </template>
+                </template>
+            </div>
+
+            <!-- FOOTER: Quick Navigation -->
+            <div slot="footer" class="card-footer">
+                <lightning-button
+                    label="View Full Asset"
+                    variant="neutral"
+                    icon-name="utility:new_window"
+                    onclick={navigateToAsset}
+                    class="footer-btn">
+                </lightning-button>
+            </div>
+        </lightning-card>
+    </template>
+</template>

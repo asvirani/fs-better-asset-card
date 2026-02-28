@@ -1,0 +1,35 @@
+<template>
+    <template lwc:if={hasCases}>
+        <template for:each={formattedCases} for:item="c">
+            <div key={c.Id} class="case-card slds-m-bottom_x-small">
+                <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-start slds-m-bottom_xx-small">
+                    <div class="slds-col">
+                        <p class="record-title">{c.CaseNumber}</p>
+                        <p class="record-subtitle">{c.Subject}</p>
+                    </div>
+                    <div class="slds-col slds-no-flex">
+                        <span class={c.statusClass}>{c.Status}</span>
+                    </div>
+                </div>
+                <div class="slds-grid slds-wrap slds-gutters_x-small">
+                    <div class="slds-col slds-size_1-of-2">
+                        <p class="detail-label">Priority</p>
+                        <p class={c.priorityClass}>{c.Priority}</p>
+                    </div>
+                    <div class="slds-col slds-size_1-of-2">
+                        <p class="detail-label">Created</p>
+                        <p class="detail-value">{c.formattedCreatedDate}</p>
+                    </div>
+                </div>
+            </div>
+        </template>
+    </template>
+    <template lwc:else>
+        <div class="slds-align_absolute-center slds-p-around_medium empty-state">
+            <div class="slds-text-align_center">
+                <lightning-icon icon-name="utility:info" size="small" class="slds-m-bottom_x-small"></lightning-icon>
+                <p class="slds-text-body_regular slds-text-color_weak">No cases found for this asset.</p>
+            </div>
+        </div>
+    </template>
+</template>
