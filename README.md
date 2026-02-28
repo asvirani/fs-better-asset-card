@@ -45,7 +45,7 @@ A comprehensive Lightning Web Component suite for Salesforce Field Service that 
 
 ```bash
 # Clone the repo
-git clone https://github.com/armaan-virani/fs-better-asset-card.git
+git clone https://github.com/asvirani/fs-better-asset-card.git
 cd fs-better-asset-card
 
 # Authenticate to your org
