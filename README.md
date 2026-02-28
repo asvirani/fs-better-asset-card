@@ -1,8 +1,21 @@
 # Field Service — Better Asset Card
 
-A comprehensive Lightning Web Component suite for Salesforce Field Service that provides a rich, compact asset overview card on Work Order record pages. Displays device identity, warranty status, performance metrics, service history, and asset hierarchy — all in a single card.
+A comprehensive Lightning Web Component suite for Salesforce Field Service that provides a rich, compact asset overview card on Work Order record pages. Displays device identity, warranty status, performance metrics, service history with 12-month trend sparkline, and asset hierarchy — all in a single card.
 
 ![Asset Card Screenshot](docs/screenshot-placeholder.png)
+
+## What's New in v0.2
+
+### 12-Month Service Trend Sparkline
+
+A pure inline SVG area chart embedded in the Service History section showing work order volume over the last 12 months. Helps technicians and dispatchers quickly see whether an asset is trending toward failure or stabilizing.
+
+- **Inline SVG area chart** — no external charting libraries, Locker Service compatible
+- **Gradient fill** with stroke line for clear visual trend
+- **Trend indicator** — "Trending Up" (red) / "Trending Down" (green) / "Stable" (gray)
+- **Month labels** — abbreviated labels beneath the chart (every 3rd month)
+- **Server-side aggregation** — separate SOQL aggregate query avoids the LIMIT 20 on work orders
+- **Auto-hide** — hidden when no work order history exists
 
 ## What's Included
 
@@ -10,7 +23,7 @@ A comprehensive Lightning Web Component suite for Salesforce Field Service that 
 
 | Component | Description |
 |---|---|
-| `sfs_assetCard` | Main asset card — compact overview with collapsible sections for metrics, service history, and hierarchy |
+| `sfs_assetCard` | Main asset card — compact overview with collapsible sections for metrics, service history (with sparkline), and hierarchy |
 | `sfs_assetOverview` | Full asset overview with tabbed detail views |
 | `sfs_assetdetails` | Asset detail display (name, serial, status, install date) |
 | `sfs_assetCases` | Related cases list for the asset |
@@ -27,7 +40,7 @@ A comprehensive Lightning Web Component suite for Salesforce Field Service that 
 
 | Class | Description |
 |---|---|
-| `AssetOverviewController` | Main controller — queries Asset, WorkOrder, AssetWarranty, AssetDowntimePeriod, and Case records. Computes availability, reliability, MTBF, and warranty status. Builds asset hierarchy tree. |
+| `AssetOverviewController` | Main controller — queries Asset, WorkOrder, AssetWarranty, AssetDowntimePeriod, and Case records. Computes availability, reliability, MTBF, and warranty status. Builds asset hierarchy tree. Aggregates 12-month work order trend data. |
 | `SFS_AssetHierarchy` | Fetches parent/child asset hierarchy data |
 | `SFS_AssetPredictionController` | Creates work plans from service predictions |
 | `SDO_SFS_ASP` | SDO service prediction work plan creation |
@@ -43,15 +56,30 @@ A comprehensive Lightning Web Component suite for Salesforce Field Service that 
 
 ### Option 1: Unlocked Package Install (Recommended)
 
-Install directly via URL:
+**v0.2** (latest — includes sparkline trend):
 
-https://login.salesforce.com/packaging/installPackage.apexp?p0=04tKa000002bKcrIAE
+Install via URL:
+
+https://login.salesforce.com/packaging/installPackage.apexp?p0=04tKa000002bKhEIAU
 
 Or via CLI:
 
 ```bash
+sf package install --package 04tKa000002bKhEIAU --target-org my-org --wait 10
+```
+
+<details>
+<summary>Previous versions</summary>
+
+**v0.1** (initial release):
+
+```bash
 sf package install --package 04tKa000002bKcrIAE --target-org my-org --wait 10
 ```
+
+Install URL: https://login.salesforce.com/packaging/installPackage.apexp?p0=04tKa000002bKcrIAE
+
+</details>
 
 ### Option 2: Deploy Source via CLI
 
@@ -79,9 +107,16 @@ sf project deploy start --source-dir force-app --target-org my-org
 2. Drag the **Asset Card** component onto the page layout
 3. Configure the component properties:
    - **Show Performance Metrics** — toggle availability, reliability, and MTBF display
-   - **Show Service History Summary** — toggle work order and case counts
+   - **Show Service History Summary** — toggle work order and case counts (includes sparkline)
    - **Show Asset Hierarchy** — toggle parent/child system hierarchy
    - **Recent Work Orders to Show** — number of recent WOs in the quick list (default: 3)
+
+## Package Versions
+
+| Version | Subscriber Package Version Id | Description |
+|---------|-------------------------------|-------------|
+| 0.2 | `04tKa000002bKhEIAU` | 12-month service trend sparkline, trend indicator |
+| 0.1 | `04tKa000002bKcrIAE` | Initial release — asset card with metrics, history, hierarchy |
 
 ## Project Structure
 
