@@ -148,6 +148,30 @@
                                 class="section-chevron">
                             </lightning-icon>
                         </div>
+                        <!-- Sparkline: 12-month trend -->
+                        <template lwc:if={hasWorkOrderTrend}>
+                            <div class="sparkline-container slds-m-bottom_xx-small slds-m-top_xx-small">
+                                <div class="sparkline-header">
+                                    <span class="metric-mini-label">12-Month Trend</span>
+                                    <span class={trendClass}>{trendLabel}</span>
+                                </div>
+                                <svg class="sparkline-svg" viewBox="0 0 200 40" preserveAspectRatio="none">
+                                    <defs>
+                                        <linearGradient id="sparkFill" x1="0" y1="0" x2="0" y2="1">
+                                            <stop offset="0%" stop-color="#0070d2" stop-opacity="0.3"></stop>
+                                            <stop offset="100%" stop-color="#0070d2" stop-opacity="0.05"></stop>
+                                        </linearGradient>
+                                    </defs>
+                                    <path d={sparklinePath} fill="url(#sparkFill)"></path>
+                                    <path d={sparklineLinePath} fill="none" stroke="#0070d2" stroke-width="1.5"></path>
+                                </svg>
+                                <div class="sparkline-labels">
+                                    <template for:each={sparklineLabels} for:item="label">
+                                        <span key={label.month} class="sparkline-month">{label.month}</span>
+                                    </template>
+                                </div>
+                            </div>
+                        </template>
                         <!-- Always visible: summary counters -->
                         <div class="slds-grid slds-gutters_xx-small slds-m-top_xx-small">
                             <div class="slds-col slds-size_1-of-3">

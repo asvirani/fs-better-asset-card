@@ -88,10 +88,53 @@ public with sharing class AssetOverviewController {
         // ===== Computed Warranty & Performance Data =====
         data.computedMetrics = computeMetrics(data.asset, data.warranties, data.downtimePeriods, data.workOrders);
 
+        // ===== Work Order Trend (12-month sparkline) =====
+        List<AggregateResult> woAgg = [
+            SELECT CALENDAR_YEAR(CreatedDate) yr, CALENDAR_MONTH(CreatedDate) mo, COUNT(Id) cnt
+            FROM WorkOrder
+            WHERE AssetId = :assetId
+            AND CreatedDate >= LAST_N_MONTHS:12
+            GROUP BY CALENDAR_YEAR(CreatedDate), CALENDAR_MONTH(CreatedDate)
+            ORDER BY CALENDAR_YEAR(CreatedDate) ASC, CALENDAR_MONTH(CreatedDate) ASC
+        ];
+        data.workOrderTrend = buildWorkOrderTrend(woAgg);
+
         // ===== Hierarchy Data =====
         data.hierarchyData = buildHierarchy(assetId, data.asset);
 
         return data;
+    }
+
+    private static List<MonthlyWorkOrderCount> buildWorkOrderTrend(List<AggregateResult> aggResults) {
+        List<String> monthAbbrevs = new List<String>{
+            'Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'
+        };
+
+        // Build 12-element list covering last 12 months (including current)
+        Date today = Date.today();
+        List<MonthlyWorkOrderCount> trend = new List<MonthlyWorkOrderCount>();
+        Map<String, MonthlyWorkOrderCount> lookup = new Map<String, MonthlyWorkOrderCount>();
+
+        for (Integer i = 11; i >= 0; i--) {
+            Date d = today.addMonths(-i);
+            MonthlyWorkOrderCount mwc = new MonthlyWorkOrderCount();
+            mwc.month = monthAbbrevs[d.month() - 1];
+            mwc.count = 0;
+            trend.add(mwc);
+            lookup.put(d.year() + '-' + d.month(), mwc);
+        }
+
+        // Fill in counts from aggregate results
+        for (AggregateResult ar : aggResults) {
+            Integer yr = (Integer) ar.get('yr');
+            Integer mo = (Integer) ar.get('mo');
+            String key = yr + '-' + mo;
+            if (lookup.containsKey(key)) {
+                lookup.get(key).count = (Integer) ar.get('cnt');
+            }
+        }
+
+        return trend;
     }
 
     private static HierarchyData buildHierarchy(Id assetId, Asset currentAsset) {
@@ -333,6 +376,12 @@ public with sharing class AssetOverviewController {
         @AuraEnabled public List<Case> cases;
         @AuraEnabled public HierarchyData hierarchyData;
         @AuraEnabled public ComputedMetrics computedMetrics;
+        @AuraEnabled public List<MonthlyWorkOrderCount> workOrderTrend;
+    }
+
+    public class MonthlyWorkOrderCount {
+        @AuraEnabled public String month;
+        @AuraEnabled public Integer count;
     }
 
     public class HierarchyData {

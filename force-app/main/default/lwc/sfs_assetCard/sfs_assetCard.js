@@ -225,6 +225,78 @@ export default class Sfs_assetCard extends NavigationMixin(LightningElement) {
         return '--';
     }
 
+    // ===== Sparkline / Work Order Trend =====
+
+    get workOrderTrend() {
+        return this.data && this.data.workOrderTrend ? this.data.workOrderTrend : [];
+    }
+
+    get hasWorkOrderTrend() {
+        return this.workOrderTrend.some(m => m.count > 0);
+    }
+
+    get sparklinePath() {
+        const trend = this.workOrderTrend;
+        if (trend.length === 0) return '';
+        const width = 200;
+        const height = 40;
+        const topPad = 4;
+        const maxCount = Math.max(...trend.map(m => m.count), 1);
+        const xStep = width / (trend.length - 1);
+
+        const points = trend.map((m, i) => {
+            const x = i * xStep;
+            const y = height - (m.count / maxCount) * (height - topPad);
+            return `${x},${y}`;
+        });
+
+        return `M 0,${height} L ${points.join(' L ')} L ${width},${height} Z`;
+    }
+
+    get sparklineLinePath() {
+        const trend = this.workOrderTrend;
+        if (trend.length === 0) return '';
+        const width = 200;
+        const height = 40;
+        const topPad = 4;
+        const maxCount = Math.max(...trend.map(m => m.count), 1);
+        const xStep = width / (trend.length - 1);
+
+        const points = trend.map((m, i) => {
+            const x = i * xStep;
+            const y = height - (m.count / maxCount) * (height - topPad);
+            return `${x},${y}`;
+        });
+
+        return `M ${points.join(' L ')}`;
+    }
+
+    get sparklineLabels() {
+        return this.workOrderTrend
+            .filter((_, i) => i % 3 === 0)
+            .map(m => ({ month: m.month }));
+    }
+
+    get trendDirection() {
+        const trend = this.workOrderTrend;
+        if (trend.length < 6) return 'stable';
+        const recent = trend.slice(-3).reduce((s, m) => s + m.count, 0) / 3;
+        const older = trend.slice(0, 3).reduce((s, m) => s + m.count, 0) / 3;
+        if (recent > older * 1.25) return 'increasing';
+        if (recent < older * 0.75) return 'decreasing';
+        return 'stable';
+    }
+
+    get trendLabel() {
+        const map = { increasing: 'Trending Up', decreasing: 'Trending Down', stable: 'Stable' };
+        return map[this.trendDirection];
+    }
+
+    get trendClass() {
+        const map = { increasing: 'trend-up', decreasing: 'trend-down', stable: 'trend-stable' };
+        return map[this.trendDirection];
+    }
+
     // ===== Service History Summary =====
 
     get totalWorkOrderCount() {
