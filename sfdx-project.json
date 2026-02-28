@@ -6,7 +6,7 @@
       "path": "force-app",
       "default": true,
       "package": "Better Asset Card",
-      "versionDescription": ""
+      "versionDescription": "12-month service trend sparkline, lifecycle fields, full asset card"
     }
   ],
   "name": "fs-better-asset-card",
@@ -14,9 +14,7 @@
   "sfdcLoginUrl": "https://login.salesforce.com",
   "sourceApiVersion": "65.0",
   "packageAliases": {
-    "Better Asset Card": "0HoKa000000PHwpKAG",
-    "Better Asset Card@0.1.0-1": "04tKa000002bKcrIAE",
-    "Better Asset Card@0.2.0-1": "04tKa000002bKh9IAE",
-    "Better Asset Card@0.2.0-2": "04tKa000002bKhEIAU"
+    "Better Asset Card": "0HoKa000000sgNCKAY",
+    "Better Asset Card@0.2.0-1": "04tKa000002znWCIAY"
   }
 }

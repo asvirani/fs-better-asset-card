@@ -56,30 +56,17 @@ A pure inline SVG area chart embedded in the Service History section showing wor
 
 ### Option 1: Unlocked Package Install (Recommended)
 
-**v0.2** (latest — includes sparkline trend):
+**v0.2** (latest — includes sparkline trend, lifecycle fields, full deployed source):
 
 Install via URL:
 
-https://login.salesforce.com/packaging/installPackage.apexp?p0=04tKa000002bKhEIAU
+https://login.salesforce.com/packaging/installPackage.apexp?p0=04tKa000002znWCIAY
 
 Or via CLI:
 
 ```bash
-sf package install --package 04tKa000002bKhEIAU --target-org my-org --wait 10
+sf package install --package 04tKa000002znWCIAY --target-org my-org --wait 10
 ```
-
-<details>
-<summary>Previous versions</summary>
-
-**v0.1** (initial release):
-
-```bash
-sf package install --package 04tKa000002bKcrIAE --target-org my-org --wait 10
-```
-
-Install URL: https://login.salesforce.com/packaging/installPackage.apexp?p0=04tKa000002bKcrIAE
-
-</details>
 
 ### Option 2: Deploy Source via CLI
 
@@ -113,10 +100,10 @@ sf project deploy start --source-dir force-app --target-org my-org
 
 ## Package Versions
 
-| Version | Subscriber Package Version Id | Description |
-|---------|-------------------------------|-------------|
-| 0.2 | `04tKa000002bKhEIAU` | 12-month service trend sparkline, trend indicator |
-| 0.1 | `04tKa000002bKcrIAE` | Initial release — asset card with metrics, history, hierarchy |
+| Version | Subscriber Package Version Id | Dev Hub | Description |
+|---------|-------------------------------|---------|-------------|
+| 0.2 | `04tKa000002znWCIAY` | assetdemo | Sparkline trend, lifecycle fields, full deployed source |
+| 0.1 | `04tKa000002bKcrIAE` | abbotdemo | Initial release — asset card with metrics, history, hierarchy |
 
 ## Project Structure
 
