@@ -175,7 +175,7 @@ export default class Sfs_assetCard extends NavigationMixin(LightningElement) {
         if (this.computedMetrics && this.computedMetrics.availability != null) {
             return Number(this.computedMetrics.availability).toFixed(1) + '%';
         }
-        return '--';
+        return 'No Data';
     }
 
     get availabilityRaw() {
@@ -196,7 +196,7 @@ export default class Sfs_assetCard extends NavigationMixin(LightningElement) {
         if (this.computedMetrics && this.computedMetrics.reliability != null) {
             return Number(this.computedMetrics.reliability).toFixed(1) + '%';
         }
-        return '--';
+        return 'No Data';
     }
 
     get mtbf() {
@@ -208,21 +208,51 @@ export default class Sfs_assetCard extends NavigationMixin(LightningElement) {
             if (h >= 24) return Math.round(h / 24) + ' d';
             return h.toFixed(0) + ' hrs';
         }
-        return '--';
+        return 'No Data';
     }
 
     get avgRepairTime() {
         if (this.computedMetrics && this.computedMetrics.avgRepairTime != null) {
             return Number(this.computedMetrics.avgRepairTime).toFixed(1) + ' hrs';
         }
-        return '--';
+        return 'No Data';
     }
 
     get downtimeHours() {
         if (this.computedMetrics && this.computedMetrics.downtimeHours != null) {
             return Number(this.computedMetrics.downtimeHours).toFixed(1) + ' hrs';
         }
-        return '--';
+        return 'No Data';
+    }
+
+    // ===== Lifecycle Fields =====
+
+    get lastServiceDate() {
+        return this.computedMetrics && this.computedMetrics.lastServiceDate
+            ? this.computedMetrics.lastServiceDate
+            : 'No Service History';
+    }
+
+    get nextScheduledService() {
+        return this.computedMetrics && this.computedMetrics.nextScheduledService
+            ? this.computedMetrics.nextScheduledService
+            : 'None Scheduled';
+    }
+
+    get installDateDisplay() {
+        return this.computedMetrics && this.computedMetrics.installDateFormatted
+            ? this.computedMetrics.installDateFormatted
+            : 'Unknown';
+    }
+
+    get assetAge() {
+        return this.computedMetrics && this.computedMetrics.assetAge
+            ? this.computedMetrics.assetAge
+            : 'Unknown';
+    }
+
+    get hasInstallDate() {
+        return this.computedMetrics && this.computedMetrics.installDateFormatted != null;
     }
 
     // ===== Sparkline / Work Order Trend =====

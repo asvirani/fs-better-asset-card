@@ -37,6 +37,13 @@
                     <div class="slds-col">
                         <div class="device-name slds-truncate" title={productName}>{productName}</div>
                         <div class="serial-number">SN: {serialNumber}</div>
+                        <div class="asset-lifecycle">
+                            <span class="lifecycle-label">Installed:</span>
+                            <span>{installDateDisplay}</span>
+                            <span class="lifecycle-separator">&bull;</span>
+                            <span class="lifecycle-label">Age:</span>
+                            <span>{assetAge}</span>
+                        </div>
                     </div>
                     <div class="slds-col slds-no-flex">
                         <span class={deviceStatusClass}>
@@ -148,9 +155,24 @@
                                 class="section-chevron">
                             </lightning-icon>
                         </div>
+                        <!-- Always visible: service dates -->
+                        <div class="service-dates slds-grid slds-gutters_xx-small slds-m-top_xx-small slds-m-bottom_xx-small">
+                            <div class="slds-col slds-size_1-of-2">
+                                <div class="metric-mini">
+                                    <span class="metric-mini-label">Last Service</span>
+                                    <span class="metric-value">{lastServiceDate}</span>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2">
+                                <div class="metric-mini">
+                                    <span class="metric-mini-label">Next Service</span>
+                                    <span class="metric-value">{nextScheduledService}</span>
+                                </div>
+                            </div>
+                        </div>
                         <!-- Sparkline: 12-month trend -->
                         <template lwc:if={hasWorkOrderTrend}>
-                            <div class="sparkline-container slds-m-bottom_xx-small slds-m-top_xx-small">
+                            <div class="sparkline-container slds-m-bottom_xx-small">
                                 <div class="sparkline-header">
                                     <span class="metric-mini-label">12-Month Trend</span>
                                     <span class={trendClass}>{trendLabel}</span>
@@ -173,7 +195,7 @@
                             </div>
                         </template>
                         <!-- Always visible: summary counters -->
-                        <div class="slds-grid slds-gutters_xx-small slds-m-top_xx-small">
+                        <div class="slds-grid slds-gutters_xx-small">
                             <div class="slds-col slds-size_1-of-3">
                                 <div class="counter-tile">
                                     <div class="counter-value">{totalWorkOrderCount}</div>

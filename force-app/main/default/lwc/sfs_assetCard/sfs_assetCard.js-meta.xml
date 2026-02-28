@@ -3,7 +3,7 @@
     <apiVersion>62.0</apiVersion>
     <isExposed>true</isExposed>
     <masterLabel>Asset Card</masterLabel>
-    <description>Compact asset overview card for field service on Work Order pages</description>
+    <description>Compact asset overview card for field service on Work Order, Asset, and Case pages</description>
     <targets>
         <target>lightning__RecordPage</target>
     </targets>
@@ -11,6 +11,8 @@
         <targetConfig targets="lightning__RecordPage">
             <objects>
                 <object>WorkOrder</object>
+                <object>Asset</object>
+                <object>Case</object>
             </objects>
             <property name="showMetrics" type="Boolean" default="true" label="Show Performance Metrics" description="Display availability, reliability, and MTBF metrics"/>
             <property name="showServiceHistory" type="Boolean" default="true" label="Show Service History Summary" description="Show recent work order and case counts"/>

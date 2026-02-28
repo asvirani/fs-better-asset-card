@@ -5,7 +5,14 @@ public with sharing class AssetOverviewController {
         String sObjectType = recordId.getSObjectType().getDescribe().getName();
         Id assetId;
 
-        if (sObjectType == 'WorkOrder') {
+        if (sObjectType == 'Asset') {
+            assetId = recordId;
+        } else if (sObjectType == 'Case') {
+            List<Case> cases = [SELECT AssetId FROM Case WHERE Id = :recordId LIMIT 1];
+            if (!cases.isEmpty() && cases[0].AssetId != null) {
+                assetId = cases[0].AssetId;
+            }
+        } else if (sObjectType == 'WorkOrder') {
             List<WorkOrder> wos = [SELECT AssetId FROM WorkOrder WHERE Id = :recordId LIMIT 1];
             if (!wos.isEmpty() && wos[0].AssetId != null) {
                 assetId = wos[0].AssetId;
@@ -85,8 +92,18 @@ public with sharing class AssetOverviewController {
             LIMIT 20
         ];
 
+        // ===== Next Scheduled Maintenance =====
+        List<MaintenanceAsset> maintenanceAssets = [
+            SELECT MaintenancePlan.NextSuggestedMaintenanceDate
+            FROM MaintenanceAsset
+            WHERE AssetId = :assetId
+            AND MaintenancePlan.NextSuggestedMaintenanceDate >= TODAY
+            ORDER BY MaintenancePlan.NextSuggestedMaintenanceDate ASC
+            LIMIT 1
+        ];
+
         // ===== Computed Warranty & Performance Data =====
-        data.computedMetrics = computeMetrics(data.asset, data.warranties, data.downtimePeriods, data.workOrders);
+        data.computedMetrics = computeMetrics(data.asset, data.warranties, data.downtimePeriods, data.workOrders, maintenanceAssets);
 
         // ===== Work Order Trend (12-month sparkline) =====
         List<AggregateResult> woAgg = [
@@ -225,7 +242,8 @@ public with sharing class AssetOverviewController {
     // ===== Compute Warranty & Performance Metrics =====
 
     private static ComputedMetrics computeMetrics(Asset a, List<AssetWarranty> warranties,
-            List<AssetDowntimePeriod> downtimePeriods, List<WorkOrder> workOrders) {
+            List<AssetDowntimePeriod> downtimePeriods, List<WorkOrder> workOrders,
+            List<MaintenanceAsset> maintenanceAssets) {
         ComputedMetrics m = new ComputedMetrics();
 
         // --- Warranty Status ---
@@ -354,7 +372,71 @@ public with sharing class AssetOverviewController {
             }
         }
 
+        // --- Last Service Date ---
+        for (WorkOrder wo : workOrders) {
+            if (wo.Status == 'Completed' || wo.Status == 'Closed') {
+                if (wo.EndDate != null) {
+                    m.lastServiceDate = formatDatetime(wo.EndDate);
+                } else {
+                    m.lastServiceDate = formatDatetime(wo.CreatedDate);
+                }
+                break; // workOrders already sorted by CreatedDate DESC
+            }
+        }
+
+        // --- Next Scheduled Service ---
+        if (!maintenanceAssets.isEmpty() && maintenanceAssets[0].MaintenancePlan.NextSuggestedMaintenanceDate != null) {
+            m.nextScheduledService = formatDate(maintenanceAssets[0].MaintenancePlan.NextSuggestedMaintenanceDate);
+        } else {
+            // Fallback: next future open WorkOrder StartDate
+            for (Integer i = workOrders.size() - 1; i >= 0; i--) {
+                WorkOrder wo = workOrders[i];
+                if (wo.StartDate != null && wo.StartDate >= today &&
+                    wo.Status != 'Completed' && wo.Status != 'Closed' && wo.Status != 'Canceled') {
+                    m.nextScheduledService = formatDatetime(wo.StartDate);
+                    break;
+                }
+            }
+        }
+
+        // --- Install Date & Asset Age ---
+        if (a.InstallDate != null) {
+            m.installDateFormatted = formatDate(a.InstallDate);
+            m.assetAge = computeAge(a.InstallDate, Date.today());
+        }
+
         return m;
+    }
+
+    private static String formatDate(Date d) {
+        if (d == null) return null;
+        Datetime dt = Datetime.newInstance(d.year(), d.month(), d.day());
+        return dt.format('MMM d, yyyy');
+    }
+
+    private static String formatDatetime(Object val) {
+        if (val == null) return null;
+        if (val instanceof Datetime) {
+            return ((Datetime)val).format('MMM d, yyyy');
+        }
+        if (val instanceof Date) {
+            return formatDate((Date)val);
+        }
+        return String.valueOf(val);
+    }
+
+    private static String computeAge(Date installDate, Date referenceDate) {
+        Integer totalMonths = installDate.monthsBetween(referenceDate);
+        Integer years = totalMonths / 12;
+        Integer months = Math.mod(totalMonths, 12);
+        if (years > 0 && months > 0) {
+            return years + ' yr ' + months + ' mo';
+        } else if (years > 0) {
+            return years + ' yr';
+        } else if (months > 0) {
+            return months + ' mo';
+        }
+        return '< 1 mo';
     }
 
     public class ComputedMetrics {
@@ -366,6 +448,10 @@ public with sharing class AssetOverviewController {
         @AuraEnabled public Decimal downtimeHours;
         @AuraEnabled public Decimal avgRepairTime;
         @AuraEnabled public Decimal mtbf;
+        @AuraEnabled public String lastServiceDate;
+        @AuraEnabled public String nextScheduledService;
+        @AuraEnabled public String installDateFormatted;
+        @AuraEnabled public String assetAge;
     }
 
     public class AssetOverviewData {

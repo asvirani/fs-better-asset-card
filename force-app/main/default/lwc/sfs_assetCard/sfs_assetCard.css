@@ -27,6 +27,25 @@
     letter-spacing: 0.025rem;
 }
 
+.asset-lifecycle {
+    font-size: 0.6875rem;
+    color: #3e3e3c;
+    margin-top: 0.125rem;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.lifecycle-label {
+    color: #706e6b;
+    font-weight: 600;
+}
+
+.lifecycle-separator {
+    color: #c9c7c5;
+    margin: 0 0.125rem;
+}
+
 /* ===== Product Family Badges ===== */
 .family-badge {
     display: inline-block;

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>SDO_Service_Perform_Status__c</fullName>
+    <deprecated>false</deprecated>
     <description>Used by SMS Process Builder to fire message notification when Performace_Status__c = Low</description>
     <inlineHelpText>Used by SMS Process Builder to fire message notification when Performace_Status__c = Low</inlineHelpText>
     <label>Performance Status</label>
