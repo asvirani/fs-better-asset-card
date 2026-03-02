@@ -1,4 +1,5 @@
 import { LightningElement, api } from 'lwc';
+import { formatDateTime, getDowntimeTypeClass } from 'c/sfs_assetUtils';
 
 export default class Sfs_assetDowntime extends LightningElement {
     @api downtimePeriods = [];
@@ -11,25 +12,13 @@ export default class Sfs_assetDowntime extends LightningElement {
         if (!this.downtimePeriods) return [];
         return this.downtimePeriods.map(dp => ({
             ...dp,
-            formattedStartTime: this.formatDateTime(dp.StartTime),
-            formattedEndTime: this.formatDateTime(dp.EndTime),
+            formattedStartTime: formatDateTime(dp.StartTime),
+            formattedEndTime: formatDateTime(dp.EndTime),
             duration: this.calculateDuration(dp.StartTime, dp.EndTime),
             downtimeTypeLabel: dp.DowntimeType || '—',
             descriptionLabel: dp.Description || '—',
-            typeClass: this.getTypeClass(dp.DowntimeType)
+            typeClass: getDowntimeTypeClass(dp.DowntimeType)
         }));
-    }
-
-    formatDateTime(dtStr) {
-        if (!dtStr) return '—';
-        const d = new Date(dtStr);
-        return d.toLocaleDateString('en-US', {
-            month: 'short',
-            day: 'numeric',
-            year: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
-        });
     }
 
     calculateDuration(startStr, endStr) {
@@ -44,11 +33,5 @@ export default class Sfs_assetDowntime extends LightningElement {
             return hours + 'h ' + minutes + 'm';
         }
         return minutes + 'm';
-    }
-
-    getTypeClass(type) {
-        if (type === 'Unplanned') return 'badge badge-unplanned';
-        if (type === 'Planned') return 'badge badge-planned';
-        return 'badge badge-default';
     }
 }

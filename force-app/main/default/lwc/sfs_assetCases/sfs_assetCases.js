@@ -1,4 +1,5 @@
 import { LightningElement, api } from 'lwc';
+import { formatDate, getCaseStatusClass, getPriorityClass } from 'c/sfs_assetUtils';
 
 export default class Sfs_assetCases extends LightningElement {
     @api cases = [];
@@ -11,40 +12,9 @@ export default class Sfs_assetCases extends LightningElement {
         if (!this.cases) return [];
         return this.cases.map(c => ({
             ...c,
-            formattedCreatedDate: this.formatDate(c.CreatedDate),
-            statusClass: this.getStatusClass(c.Status),
-            priorityClass: this.getPriorityClass(c.Priority)
+            formattedCreatedDate: formatDate(c.CreatedDate),
+            statusClass: getCaseStatusClass(c.Status),
+            priorityClass: getPriorityClass(c.Priority)
         }));
-    }
-
-    formatDate(dtStr) {
-        if (!dtStr) return '—';
-        const d = new Date(dtStr);
-        return d.toLocaleDateString('en-US', {
-            month: 'short',
-            day: 'numeric',
-            year: 'numeric'
-        });
-    }
-
-    getStatusClass(status) {
-        const statusMap = {
-            'New': 'badge badge-new',
-            'Working': 'badge badge-working',
-            'Escalated': 'badge badge-escalated',
-            'Closed': 'badge badge-closed',
-            'Waiting on Customer': 'badge badge-waiting'
-        };
-        return statusMap[status] || 'badge badge-default';
-    }
-
-    getPriorityClass(priority) {
-        const priorityMap = {
-            'Critical': 'priority-critical',
-            'High': 'priority-high',
-            'Medium': 'priority-medium',
-            'Low': 'priority-low'
-        };
-        return priorityMap[priority] || 'detail-value';
     }
 }

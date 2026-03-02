@@ -66,7 +66,7 @@
                     <div class="slds-grid slds-gutters_xx-small">
                         <!-- Warranty Status -->
                         <div class="slds-col slds-size_1-of-2">
-                            <div class="indicator-tile">
+                            <div class={warrantyTileClass}>
                                 <div class="indicator-label">
                                     <lightning-icon icon-name={warrantyIcon} size="xx-small" class="slds-m-right_xx-small"></lightning-icon>
                                     Warranty
@@ -79,7 +79,7 @@
                         </div>
                         <!-- Performance Status -->
                         <div class="slds-col slds-size_1-of-2">
-                            <div class="indicator-tile">
+                            <div class={performanceTileClass}>
                                 <div class="indicator-label">
                                     <lightning-icon icon-name="utility:activity" size="xx-small" class="slds-m-right_xx-small"></lightning-icon>
                                     Performance
@@ -94,51 +94,66 @@
                 <template lwc:if={showMetrics}>
                     <div class="section-divider"></div>
                     <div class="compact-section">
-                        <div class="section-header" data-section="metrics" onclick={toggleSection}>
+                        <div class="section-header"
+                             data-section="metrics"
+                             role="button"
+                             tabindex="0"
+                             aria-expanded={isMetricsExpanded}
+                             onclick={toggleSection}
+                             onkeydown={handleSectionKeydown}>
                             <span class="section-title-text">Device Metrics</span>
                             <lightning-icon
                                 icon-name={metricsChevron}
                                 size="xx-small"
-                                class="section-chevron">
+                                class={metricsChevronClass}>
                             </lightning-icon>
                         </div>
-                        <!-- Always show availability + reliability in compact row -->
-                        <div class="metrics-compact slds-grid slds-gutters_xx-small slds-m-top_xx-small">
-                            <div class="slds-col slds-size_1-of-2">
-                                <div class="metric-mini">
-                                    <span class="metric-mini-label">Availability</span>
-                                    <span class={availabilityClass}>{availability}</span>
-                                </div>
+                        <!-- Empty metrics state -->
+                        <template lwc:if={allMetricsEmpty}>
+                            <div class="metrics-empty-state">
+                                No performance data available
                             </div>
-                            <div class="slds-col slds-size_1-of-2">
-                                <div class="metric-mini">
-                                    <span class="metric-mini-label">Reliability</span>
-                                    <span class="metric-value">{reliability}</span>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Expanded: show MTBF, Avg Repair, Downtime -->
-                        <template lwc:if={isMetricsExpanded}>
-                            <div class="metrics-expanded slds-grid slds-wrap slds-gutters_xx-small slds-m-top_xx-small">
-                                <div class="slds-col slds-size_1-of-3">
+                        </template>
+                        <!-- Metrics content when data exists -->
+                        <template lwc:else>
+                            <!-- Always show availability + reliability in compact row -->
+                            <div class="metrics-compact slds-grid slds-gutters_xx-small slds-m-top_xx-small">
+                                <div class="slds-col slds-size_1-of-2">
                                     <div class="metric-mini">
-                                        <span class="metric-mini-label">MTBF</span>
-                                        <span class="metric-value">{mtbf}</span>
+                                        <span class="metric-mini-label">Availability</span>
+                                        <span class={availabilityClass}>{availability}</span>
                                     </div>
                                 </div>
-                                <div class="slds-col slds-size_1-of-3">
+                                <div class="slds-col slds-size_1-of-2">
                                     <div class="metric-mini">
-                                        <span class="metric-mini-label">Avg Repair</span>
-                                        <span class="metric-value">{avgRepairTime}</span>
-                                    </div>
-                                </div>
-                                <div class="slds-col slds-size_1-of-3">
-                                    <div class="metric-mini">
-                                        <span class="metric-mini-label">Downtime</span>
-                                        <span class="metric-value">{downtimeHours}</span>
+                                        <span class="metric-mini-label">Reliability</span>
+                                        <span class="metric-value">{reliability}</span>
                                     </div>
                                 </div>
                             </div>
+                            <!-- Expanded: show MTBF, Avg Repair, Downtime -->
+                            <template lwc:if={isMetricsExpanded}>
+                                <div class="metrics-expanded slds-grid slds-wrap slds-gutters_xx-small slds-m-top_xx-small">
+                                    <div class="slds-col slds-size_1-of-3">
+                                        <div class="metric-mini">
+                                            <span class="metric-mini-label">MTBF</span>
+                                            <span class="metric-value">{mtbf}</span>
+                                        </div>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-3">
+                                        <div class="metric-mini">
+                                            <span class="metric-mini-label">Avg Repair</span>
+                                            <span class="metric-value">{avgRepairTime}</span>
+                                        </div>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-3">
+                                        <div class="metric-mini">
+                                            <span class="metric-mini-label">Downtime</span>
+                                            <span class="metric-value">{downtimeHours}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
                         </template>
                     </div>
                 </template>
@@ -147,12 +162,18 @@
                 <template lwc:if={showServiceHistory}>
                     <div class="section-divider"></div>
                     <div class="compact-section">
-                        <div class="section-header" data-section="history" onclick={toggleSection}>
+                        <div class="section-header"
+                             data-section="history"
+                             role="button"
+                             tabindex="0"
+                             aria-expanded={isHistoryExpanded}
+                             onclick={toggleSection}
+                             onkeydown={handleSectionKeydown}>
                             <span class="section-title-text">Service History</span>
                             <lightning-icon
                                 icon-name={historyChevron}
                                 size="xx-small"
-                                class="section-chevron">
+                                class={historyChevronClass}>
                             </lightning-icon>
                         </div>
                         <!-- Always visible: service dates -->
@@ -177,7 +198,8 @@
                                     <span class="metric-mini-label">12-Month Trend</span>
                                     <span class={trendClass}>{trendLabel}</span>
                                 </div>
-                                <svg class="sparkline-svg" viewBox="0 0 200 40" preserveAspectRatio="none">
+                                <svg class="sparkline-svg" viewBox="0 0 200 40" preserveAspectRatio="none"
+                                     role="img" aria-label={sparklineAriaLabel}>
                                     <defs>
                                         <linearGradient id="sparkFill" x1="0" y1="0" x2="0" y2="1">
                                             <stop offset="0%" stop-color="#0070d2" stop-opacity="0.3"></stop>
@@ -203,7 +225,7 @@
                                 </div>
                             </div>
                             <div class="slds-col slds-size_1-of-3">
-                                <div class="counter-tile">
+                                <div class={openWoCounterClass}>
                                     <div class="counter-value counter-highlight">{openWorkOrderCount}</div>
                                     <div class="counter-label">Open WOs</div>
                                 </div>
@@ -242,7 +264,13 @@
                     <template lwc:if={hasHierarchyData}>
                         <div class="section-divider"></div>
                         <div class="compact-section">
-                            <div class="section-header" data-section="hierarchy" onclick={toggleSection}>
+                            <div class="section-header"
+                                 data-section="hierarchy"
+                                 role="button"
+                                 tabindex="0"
+                                 aria-expanded={isHierarchyExpanded}
+                                 onclick={toggleSection}
+                                 onkeydown={handleSectionKeydown}>
                                 <span class="section-title-text">
                                     <lightning-icon icon-name="utility:hierarchy" size="xx-small" class="slds-m-right_xx-small"></lightning-icon>
                                     System Hierarchy

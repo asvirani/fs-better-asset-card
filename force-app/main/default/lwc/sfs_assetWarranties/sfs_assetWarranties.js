@@ -1,4 +1,5 @@
 import { LightningElement, api } from 'lwc';
+import { formatDate, getWarrantyStatusClass } from 'c/sfs_assetUtils';
 
 export default class Sfs_assetWarranties extends LightningElement {
     @api warranties = [];
@@ -18,22 +19,16 @@ export default class Sfs_assetWarranties extends LightningElement {
 
             return {
                 ...w,
-                formattedStartDate: this.formatDate(w.StartDate),
-                formattedEndDate: this.formatDate(w.EndDate),
+                formattedStartDate: formatDate(w.StartDate),
+                formattedEndDate: formatDate(w.EndDate),
                 isActive: isActive,
                 statusLabel: isActive ? 'Active' : 'Expired',
-                statusClass: isActive ? 'badge badge-active' : 'badge badge-expired',
+                statusClass: getWarrantyStatusClass(isActive),
                 laborCoveredFormatted: w.LaborCovered != null ? w.LaborCovered + '%' : '—',
                 partsCoveredFormatted: w.PartsCovered != null ? w.PartsCovered + '%' : '—',
                 expensesCoveredFormatted: w.ExpensesCovered != null ? w.ExpensesCovered + '%' : '—',
                 warrantyTypeLabel: w.WarrantyType || '—'
             };
         });
-    }
-
-    formatDate(dateStr) {
-        if (!dateStr) return '—';
-        const d = new Date(dateStr);
-        return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
     }
 }

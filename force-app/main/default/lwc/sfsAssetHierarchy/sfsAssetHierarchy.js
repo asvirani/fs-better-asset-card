@@ -1,4 +1,5 @@
 import { LightningElement, api } from 'lwc';
+import { getAssetStatusClass } from 'c/sfs_assetUtils';
 
 export default class SfsAssetHierarchy extends LightningElement {
     @api hierarchyData;
@@ -30,7 +31,7 @@ export default class SfsAssetHierarchy extends LightningElement {
     }
 
     get rootStatusClass() {
-        return this.getStatusClass(this.hierarchyData.rootNode.status);
+        return getAssetStatusClass(this.hierarchyData.rootNode.status);
     }
 
     mapChildren(children) {
@@ -38,7 +39,7 @@ export default class SfsAssetHierarchy extends LightningElement {
         return children.map(child => ({
             ...child,
             nodeClass: child.isCurrent ? 'node-card node-current' : 'node-card',
-            statusClass: this.getStatusClass(child.status),
+            statusClass: getAssetStatusClass(child.status),
             expandIcon: this.expandedNodes.has(child.assetId) ? 'utility:chevrondown' : 'utility:chevronright',
             showChildren: child.hasChildren && this.expandedNodes.has(child.assetId),
             children: this.mapGrandchildren(child.children)
@@ -50,21 +51,8 @@ export default class SfsAssetHierarchy extends LightningElement {
         return children.map(gc => ({
             ...gc,
             nodeClass: gc.isCurrent ? 'node-card node-current' : 'node-card',
-            statusClass: this.getStatusClass(gc.status)
+            statusClass: getAssetStatusClass(gc.status)
         }));
-    }
-
-    getStatusClass(status) {
-        const statusMap = {
-            'Installed': 'badge badge-installed',
-            'Active': 'badge badge-installed',
-            'Shipped': 'badge badge-shipped',
-            'Purchased': 'badge badge-shipped',
-            'Decommissioned': 'badge badge-decommissioned',
-            'Obsolete': 'badge badge-decommissioned',
-            'Under Maintenance': 'badge badge-maintenance'
-        };
-        return statusMap[status] || 'badge badge-default';
     }
 
     handleToggle(event) {

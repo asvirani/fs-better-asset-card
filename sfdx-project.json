@@ -1,12 +1,12 @@
 {
   "packageDirectories": [
     {
-      "versionName": "ver 0.2",
-      "versionNumber": "0.2.0.NEXT",
+      "versionName": "ver 0.3",
+      "versionNumber": "0.3.0.NEXT",
       "path": "force-app",
       "default": true,
       "package": "Better Asset Card",
-      "versionDescription": "12-month service trend sparkline, lifecycle fields, full asset card"
+      "versionDescription": "Shared utilities, CSS design tokens, accessibility, visual polish, transitions"
     }
   ],
   "name": "fs-better-asset-card",

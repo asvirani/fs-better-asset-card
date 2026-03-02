@@ -169,6 +169,30 @@ export default class Sfs_assetCard extends NavigationMixin(LightningElement) {
         return 'status-badge';
     }
 
+    // ===== Indicator Tile Accent Classes =====
+
+    get warrantyTileClass() {
+        const s = this.warrantyStatus;
+        if (s === 'Active') return 'indicator-tile indicator-tile-good';
+        if (s === 'Expired') return 'indicator-tile indicator-tile-critical';
+        if (s === 'No Warranty') return 'indicator-tile indicator-tile-neutral';
+        return 'indicator-tile';
+    }
+
+    get performanceTileClass() {
+        const s = this.performanceStatus;
+        if (s === 'Normal') return 'indicator-tile indicator-tile-good';
+        if (s === 'Degraded') return 'indicator-tile indicator-tile-warning';
+        if (s === 'Critical') return 'indicator-tile indicator-tile-critical';
+        return 'indicator-tile';
+    }
+
+    // ===== Counter Tile Classes =====
+
+    get openWoCounterClass() {
+        return this.openWorkOrderCount > 0 ? 'counter-tile counter-tile-active' : 'counter-tile';
+    }
+
     // ===== Performance Metrics =====
 
     get availability() {
@@ -327,6 +351,11 @@ export default class Sfs_assetCard extends NavigationMixin(LightningElement) {
         return map[this.trendDirection];
     }
 
+    get sparklineAriaLabel() {
+        const total = this.workOrderTrend.reduce((sum, m) => sum + m.count, 0);
+        return `12-month work order trend: ${total} total, ${this.trendLabel}`;
+    }
+
     // ===== Service History Summary =====
 
     get totalWorkOrderCount() {
@@ -465,13 +494,32 @@ export default class Sfs_assetCard extends NavigationMixin(LightningElement) {
         }
     }
 
+    // ===== Empty Aggregate Handling =====
+
+    get allMetricsEmpty() {
+        const m = this.computedMetrics;
+        if (!m) return true;
+        return m.availability == null
+            && m.reliability == null
+            && m.mtbf == null
+            && m.avgRepairTime == null
+            && m.downtimeHours == null;
+    }
+
     // ===== Collapsible Sections =====
+
     toggleSection(event) {
         const section = event.currentTarget.dataset.section;
-        // Create a new object to trigger reactivity
         const updated = Object.assign({}, this.expandedSections);
         updated[section] = !updated[section];
         this.expandedSections = updated;
+    }
+
+    handleSectionKeydown(event) {
+        if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            this.toggleSection(event);
+        }
     }
 
     get isMetricsExpanded() { return !!this.expandedSections.metrics; }
@@ -481,4 +529,8 @@ export default class Sfs_assetCard extends NavigationMixin(LightningElement) {
     get metricsChevron() { return this.isMetricsExpanded ? 'utility:chevrondown' : 'utility:chevronright'; }
     get historyChevron() { return this.isHistoryExpanded ? 'utility:chevrondown' : 'utility:chevronright'; }
     get hierarchyChevron() { return this.isHierarchyExpanded ? 'utility:chevrondown' : 'utility:chevronright'; }
+
+    get metricsChevronClass() { return this.isMetricsExpanded ? 'section-chevron section-chevron-expanded' : 'section-chevron'; }
+    get historyChevronClass() { return this.isHistoryExpanded ? 'section-chevron section-chevron-expanded' : 'section-chevron'; }
+    get hierarchyChevronClass() { return this.isHierarchyExpanded ? 'section-chevron section-chevron-expanded' : 'section-chevron'; }
 }

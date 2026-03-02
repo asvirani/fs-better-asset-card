@@ -1,14 +1,25 @@
+:host {
+    --sfs-color-info: var(--slds-g-color-brand-base-50, #0070d2);
+    --sfs-color-neutral: var(--slds-g-color-neutral-base-40, #706e6b);
+    --sfs-color-text-primary: var(--slds-g-color-neutral-base-10, #181818);
+    --sfs-color-text-secondary: var(--slds-g-color-neutral-base-50, #3e3e3c);
+    --sfs-color-text-muted: var(--slds-g-color-neutral-base-40, #706e6b);
+    --sfs-color-border: var(--slds-g-color-border-base-4, #e5e5e5);
+    --sfs-color-surface-alt: var(--slds-g-color-neutral-base-95, #f3f3f3);
+    --sfs-radius-lg: 0.5rem;
+}
+
 .downtime-card {
     background: #ffffff;
-    border: 1px solid #e5e5e5;
-    border-radius: 0.5rem;
+    border: 1px solid var(--sfs-color-border);
+    border-radius: var(--sfs-radius-lg);
     padding: 0.75rem;
 }
 
 .record-title {
     font-size: 0.875rem;
     font-weight: 700;
-    color: #181818;
+    color: var(--sfs-color-text-primary);
 }
 
 .badge {
@@ -27,23 +38,23 @@
 
 .badge-planned {
     background: #e8f4fd;
-    color: #0070d2;
+    color: var(--sfs-color-info);
 }
 
 .badge-default {
-    background: #f3f3f3;
-    color: #706e6b;
+    background: var(--sfs-color-surface-alt);
+    color: var(--sfs-color-neutral);
 }
 
 .detail-label {
     font-size: 0.6875rem;
-    color: #706e6b;
+    color: var(--sfs-color-text-muted);
     margin-bottom: 0.0625rem;
 }
 
 .detail-value {
     font-size: 0.8125rem;
-    color: #181818;
+    color: var(--sfs-color-text-primary);
 }
 
 .duration-value {
@@ -52,7 +63,7 @@
 
 .description-text {
     font-size: 0.8125rem;
-    color: #3e3e3c;
+    color: var(--sfs-color-text-secondary);
     font-style: italic;
 }
 

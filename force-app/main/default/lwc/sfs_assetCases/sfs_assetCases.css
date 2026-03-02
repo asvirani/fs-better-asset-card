@@ -1,19 +1,31 @@
+:host {
+    --sfs-color-good: var(--slds-g-color-success-base-50, #2e844a);
+    --sfs-color-critical: var(--slds-g-color-error-base-50, #ea001e);
+    --sfs-color-info: var(--slds-g-color-brand-base-50, #0070d2);
+    --sfs-color-neutral: var(--slds-g-color-neutral-base-40, #706e6b);
+    --sfs-color-text-primary: var(--slds-g-color-neutral-base-10, #181818);
+    --sfs-color-text-muted: var(--slds-g-color-neutral-base-40, #706e6b);
+    --sfs-color-border: var(--slds-g-color-border-base-4, #e5e5e5);
+    --sfs-color-surface-alt: var(--slds-g-color-neutral-base-95, #f3f3f3);
+    --sfs-radius-lg: 0.5rem;
+}
+
 .case-card {
     background: #ffffff;
-    border: 1px solid #e5e5e5;
-    border-radius: 0.5rem;
+    border: 1px solid var(--sfs-color-border);
+    border-radius: var(--sfs-radius-lg);
     padding: 0.75rem;
 }
 
 .record-title {
     font-size: 0.875rem;
     font-weight: 700;
-    color: #181818;
+    color: var(--sfs-color-text-primary);
 }
 
 .record-subtitle {
     font-size: 0.8125rem;
-    color: #706e6b;
+    color: var(--sfs-color-text-muted);
 }
 
 .badge {
@@ -27,7 +39,7 @@
 
 .badge-new {
     background: #e8f4fd;
-    color: #0070d2;
+    color: var(--sfs-color-info);
 }
 
 .badge-working {
@@ -37,12 +49,12 @@
 
 .badge-escalated {
     background: #f8d7da;
-    color: #c23934;
+    color: var(--sfs-color-critical);
 }
 
 .badge-closed {
     background: #d4edda;
-    color: #2e844a;
+    color: var(--sfs-color-good);
 }
 
 .badge-waiting {
@@ -51,19 +63,19 @@
 }
 
 .badge-default {
-    background: #f3f3f3;
-    color: #706e6b;
+    background: var(--sfs-color-surface-alt);
+    color: var(--sfs-color-neutral);
 }
 
 .detail-label {
     font-size: 0.6875rem;
-    color: #706e6b;
+    color: var(--sfs-color-text-muted);
     margin-bottom: 0.0625rem;
 }
 
 .detail-value {
     font-size: 0.8125rem;
-    color: #181818;
+    color: var(--sfs-color-text-primary);
 }
 
 .priority-critical {
@@ -80,12 +92,12 @@
 
 .priority-medium {
     font-size: 0.8125rem;
-    color: #0070d2;
+    color: var(--sfs-color-info);
 }
 
 .priority-low {
     font-size: 0.8125rem;
-    color: #706e6b;
+    color: var(--sfs-color-neutral);
 }
 
 .empty-state {
